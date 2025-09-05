@@ -1,0 +1,29 @@
+{
+  "Comment": "ETL pipeline",
+  "StartAt": "Validate",
+  "States": {
+    "Validate": {
+      "Type": "Task",
+      "Resource": "${Validate}",
+      "Retry": [{ "ErrorEquals": ["States.ALL"], "IntervalSeconds": 2, "MaxAttempts": 3, "BackoffRate": 2.0 }],
+      "Next": "Enrich"
+    },
+    "Enrich": {
+      "Type": "Task",
+      "Resource": "${Enrich}",
+      "Retry": [{ "ErrorEquals": ["States.ALL"], "IntervalSeconds": 2, "MaxAttempts": 3, "BackoffRate": 2.0 }],
+      "Next": "Transform"
+    },
+    "Transform": {
+      "Type": "Task",
+      "Resource": "${Transform}",
+      "Retry": [{ "ErrorEquals": ["States.ALL"], "IntervalSeconds": 2, "MaxAttempts": 3, "BackoffRate": 2.0 }],
+      "Next": "Upload"
+    },
+    "Upload": {
+      "Type": "Task",
+      "Resource": "${Upload}",
+      "End": true
+    }
+  }
+}
